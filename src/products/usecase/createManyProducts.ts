@@ -6,8 +6,8 @@ import { ProductsRepository } from "@/products/repository";
  *
  * Creates multiple new products in the repository.
  *
- * @param {ProductsModel.Create[]} productsToCreate Array of product data to create
- * @returns {Promise<ProductsModel.Entity[]>} Array of newly created product entities
+ * @param {ProductsModel.Create[]} productsToCreate Array of product data to create.
+ * @returns {Promise<ProductsModel.Entity[]>} Array of newly created product entities.
  */
 export const createManyProductsUseCase = async (
 	productsToCreate: ProductsModel.Create[],

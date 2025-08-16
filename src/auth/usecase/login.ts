@@ -12,7 +12,7 @@ import { UsersRepository } from "@/users/repository";
  *
  * @param {AuthModel.Login} userData The user credentials for login.
  * @returns {Promise<UsersModel.Entity>} The authenticated user entity.
- * @throws {AppError} Throws an error if the credentials are invalid.
+ * @throws {AppError} Throws `INVALID_CREDENTIALS` if the credentials are invalid.
  */
 export const loginUseCase = async (
 	userData: AuthModel.Login,

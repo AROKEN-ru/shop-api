@@ -5,9 +5,9 @@ import { ProductsRepository } from "@/products/repository";
 /**
  * Retrieves a product by their slug.
  *
- * @param {string} slug The slug of the product to retrieve.
+ * @param {string} slug The unique URL-friendly identifier for the product.
  * @returns {Promise<ProductsModel.Entity>} The product data.
- * @throws {AppError} Throws `NOT_FOUND` error if product with given slug doesn't exist
+ * @throws {AppError} Throws `NOT_FOUND` error if product with given slug doesn't exist.
  */
 export const getProductBySlugUseCase = async (
 	slug: string,

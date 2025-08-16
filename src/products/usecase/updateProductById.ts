@@ -12,6 +12,7 @@ import { ProductsRepository } from "@/products/repository";
  * @param {ProductsModel.UpdateById} data The updated data for the product.
  * @returns {Promise<ProductsModel.Entity>} The updated product entity.
  * @throws {AppError} Throws `NOT_FOUND` if a product with the given ID doesn't exist.
+ * @throws {AppError} Throws `ALREADY_EXISTS` if trying to update to a slug that is already used by another product.
  */
 export const updateProductByIdUseCase = async (
 	id: number,
@@ -25,7 +26,7 @@ export const updateProductByIdUseCase = async (
 
 	if (data.slug) {
 		const existingProduct = await ProductsRepository.getBySlug(data.slug);
-		if (existingProduct) {
+		if (existingProduct && existingProduct.id !== id) {
 			throw APP_ERROR.ALREADY_EXISTS("Product with this slug already exists.");
 		}
 	}

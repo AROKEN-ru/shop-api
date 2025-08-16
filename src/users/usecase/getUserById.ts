@@ -7,7 +7,7 @@ import { UsersRepository } from "@/users/repository";
  *
  * @param {number} id The ID of the user to retrieve.
  * @returns {Promise<UsersModel.Get>} The user data.
- * @throws {AppError} If the user with the given ID does not exist.
+ * @throws {AppError} Throws `NOT_FOUND` if the user with the given ID does not exist.
  */
 export const getUserByIdUseCase = async (
 	id: number,

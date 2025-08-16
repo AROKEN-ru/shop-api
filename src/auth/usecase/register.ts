@@ -12,7 +12,7 @@ import { UsersRepository } from "@/users/repository";
  *
  * @param {AuthModel.Register} userToCreate The data for the new user.
  * @returns {Promise<UsersModel.Entity>} The newly created user entity.
- * @throws {AppError} Throws an error if a user with the same email already exists.
+ * @throws {AppError} Throws `ALREADY_EXISTS` if a user with the same email already exists.
  */
 export const registerUseCase = async (
 	userToCreate: AuthModel.Register,
