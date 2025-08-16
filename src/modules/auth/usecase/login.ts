@@ -9,12 +9,12 @@ import { type AuthModel, verifyPassword } from "..";
  * and returns the user entity if authentication succeeds.
  *
  * @param {AuthModel.Login} userData The user credentials for login.
- * @returns {Promise<UsersModel.Entity>} The authenticated user entity.
+ * @returns {Promise<UsersModel.Get>} The authenticated user.
  * @throws {AppError} Throws `INVALID_CREDENTIALS` if the credentials are invalid.
  */
 export const loginUseCase = async (
 	userData: AuthModel.Login,
-): Promise<UsersModel.Entity> => {
+): Promise<UsersModel.Get> => {
 	const user = await UsersRepository.getByEmail(userData.email);
 	if (!user) {
 		throw APP_ERROR.INVALID_CREDENTIALS();
@@ -28,5 +28,11 @@ export const loginUseCase = async (
 		throw APP_ERROR.INVALID_CREDENTIALS();
 	}
 
-	return user;
+	return {
+		id: user.id,
+		email: user.email,
+		name: user.name,
+		createdAt: user.createdAt,
+		updatedAt: user.updatedAt,
+	};
 };

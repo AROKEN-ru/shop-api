@@ -1,4 +1,4 @@
-import { type TSchema, t } from "elysia";
+import { t } from "elysia";
 import { STATUS } from "@/common/statusCodes";
 
 export const errorSchema = t.Object({
@@ -25,11 +25,11 @@ export const ERROR_RESPONSES = {
 	[STATUS.INTERNAL_SERVER_ERROR]: errorSchema,
 } as const;
 
-export const withAuthErrors = (
-	responseSchemas: Record<number, TSchema> = {},
-) => {
+export const withAuthErrors = <T extends Record<number, any>>(
+	responseSchemas: T,
+): T & { 401: (typeof ERROR_RESPONSES)[401] } => {
 	return {
 		...responseSchemas,
-		[STATUS.UNAUTHORIZED]: ERROR_RESPONSES[STATUS.UNAUTHORIZED],
-	} as const;
+		401: ERROR_RESPONSES[STATUS.UNAUTHORIZED],
+	};
 };

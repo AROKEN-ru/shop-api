@@ -12,16 +12,16 @@ export const authController = new Elysia({
 	.use(jwtSetup)
 	.post(
 		"/register",
-		async ({ body, jwt, set }) => {
+		async ({ body, jwt, status }) => {
 			const user = await registerUseCase(body);
 			const token = await jwt.sign({
 				id: user.id,
 			});
 
-			set.status = STATUS.CREATED;
-			return {
+			return status(STATUS.CREATED, {
 				token,
-			};
+				user,
+			});
 		},
 		{
 			body: AuthModel.register,
@@ -32,7 +32,7 @@ export const authController = new Elysia({
 					ERROR_RESPONSES[STATUS.UNPROCESSABLE_ENTITY],
 			},
 			detail: {
-				description: "Register a new user and return jwt token.",
+				description: "Register a new user and return jwt token and user data.",
 			},
 		},
 	)
@@ -46,6 +46,7 @@ export const authController = new Elysia({
 
 			return {
 				token,
+				user,
 			};
 		},
 		{
@@ -57,7 +58,7 @@ export const authController = new Elysia({
 					ERROR_RESPONSES[STATUS.UNPROCESSABLE_ENTITY],
 			},
 			detail: {
-				description: "Login a user and return jwt token.",
+				description: "Login a user and return jwt token and user data.",
 			},
 		},
 	);

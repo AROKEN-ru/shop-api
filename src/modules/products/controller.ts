@@ -1,4 +1,4 @@
-import Elysia, { t } from "elysia";
+import Elysia from "elysia";
 import { ERROR_RESPONSES, withAuthErrors } from "@/common/errorResponses";
 import { STATUS } from "@/common/statusCodes";
 import { authGuard } from "@/modules/auth";
@@ -62,9 +62,9 @@ export const productsController = new Elysia({
 	)
 	.post(
 		"",
-		({ body, set }) => {
-			set.status = STATUS.CREATED;
-			return createProductUseCase(body);
+		async ({ body, status }) => {
+			const product = await createProductUseCase(body);
+			return status(STATUS.CREATED, product);
 		},
 		{
 			body: ProductsModel.create,
@@ -79,14 +79,14 @@ export const productsController = new Elysia({
 	)
 	.delete(
 		"/:id",
-		({ params, set }) => {
-			set.status = STATUS.NO_CONTENT;
-			deleteProductByIdUseCase(params.id);
+		async ({ params, status }) => {
+			const product = await deleteProductByIdUseCase(params.id);
+			return status(STATUS.NO_CONTENT, product);
 		},
 		{
 			params: ProductsModel.byIdParams,
 			response: withAuthErrors({
-				[STATUS.NO_CONTENT]: t.Object({}),
+				[STATUS.NO_CONTENT]: ProductsModel.entity,
 				[STATUS.NOT_FOUND]: ERROR_RESPONSES[STATUS.NOT_FOUND],
 			}),
 			detail: {
@@ -96,8 +96,9 @@ export const productsController = new Elysia({
 	)
 	.patch(
 		"/:id",
-		({ params, body }) => {
-			return updateProductByIdUseCase(params.id, body);
+		async ({ params, body, status }) => {
+			const product = await updateProductByIdUseCase(params.id, body);
+			return status(STATUS.OK, product);
 		},
 		{
 			params: ProductsModel.byIdParams,

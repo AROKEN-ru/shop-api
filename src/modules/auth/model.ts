@@ -12,6 +12,7 @@ export namespace AuthModel {
 		token: t.String({
 			description: "JWT token",
 		}),
+		user: UsersModel.get,
 	});
 	export const registerResponse = loginResponse;
 }

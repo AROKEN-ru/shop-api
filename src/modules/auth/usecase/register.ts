@@ -9,12 +9,12 @@ import { type AuthModel, hashPassword } from "..";
  * hashes the provided password, and creates a new user in the repository.
  *
  * @param {AuthModel.Register} userToCreate The data for the new user.
- * @returns {Promise<UsersModel.Entity>} The newly created user entity.
+ * @returns {Promise<UsersModel.Get>} The newly created user.
  * @throws {AppError} Throws `ALREADY_EXISTS` if a user with the same email already exists.
  */
 export const registerUseCase = async (
 	userToCreate: AuthModel.Register,
-): Promise<UsersModel.Entity> => {
+): Promise<UsersModel.Get> => {
 	const existingUser = await UsersRepository.getByEmail(userToCreate.email);
 	if (existingUser) {
 		throw APP_ERROR.ALREADY_EXISTS("User with this email already exists.");
@@ -28,5 +28,11 @@ export const registerUseCase = async (
 		password: hashedPassword,
 	});
 
-	return newUser;
+	return {
+		id: newUser.id,
+		email: newUser.email,
+		name: newUser.name,
+		createdAt: newUser.createdAt,
+		updatedAt: newUser.updatedAt,
+	};
 };
