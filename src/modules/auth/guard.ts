@@ -1,7 +1,7 @@
 import bearer from "@elysiajs/bearer";
 import type Elysia from "elysia";
-import { jwtSetup } from "@/auth/jwtSetup";
 import { APP_ERROR } from "@/common/appError";
+import { jwtSetup } from "./jwtSetup";
 
 export const authGuard = (app: Elysia) =>
 	app

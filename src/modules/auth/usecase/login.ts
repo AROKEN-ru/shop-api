@@ -1,8 +1,6 @@
-import { verifyPassword } from "@/auth/hash";
-import type { AuthModel } from "@/auth/model";
 import { APP_ERROR } from "@/common/appError";
-import type { UsersModel } from "@/users/model";
-import { UsersRepository } from "@/users/repository";
+import { type UsersModel, UsersRepository } from "@/modules/users";
+import { type AuthModel, verifyPassword } from "..";
 
 /**
  * Login a user by verifying their credentials.

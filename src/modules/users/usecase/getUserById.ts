@@ -1,6 +1,5 @@
 import { APP_ERROR } from "@/common/appError";
-import type { UsersModel } from "@/users/model";
-import { UsersRepository } from "@/users/repository";
+import { type UsersModel, UsersRepository } from "..";
 
 /**
  * Retrieves a user by their ID.

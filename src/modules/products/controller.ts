@@ -1,15 +1,15 @@
 import Elysia, { t } from "elysia";
-import { authGuard } from "@/auth/guard";
 import { ERROR_RESPONSES, withAuthErrors } from "@/common/errorResponses";
 import { STATUS } from "@/common/statusCodes";
-import { ProductsModel } from "@/products/model";
+import { authGuard } from "@/modules/auth";
+import { ProductsModel } from "./model";
 import {
 	createProductUseCase,
 	deleteProductByIdUseCase,
 	getAllProductsUseCase,
 	getProductBySlugUseCase,
 	updateProductByIdUseCase,
-} from "@/products/usecase";
+} from "./usecase";
 
 export const productsController = new Elysia({
 	prefix: "/products",

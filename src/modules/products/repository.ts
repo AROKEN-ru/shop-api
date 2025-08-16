@@ -1,7 +1,7 @@
 import { asc, count, desc, eq, inArray, like, or, sql } from "drizzle-orm";
 import { db } from "@/db";
-import type { ProductsModel } from "@/products/model";
-import { productsTable } from "@/products/schema";
+import type { ProductsModel } from "./model";
+import { productsTable } from "./schema";
 
 export abstract class ProductsRepository {
 	static async getAll({

@@ -1,7 +1,7 @@
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
-import { productsTable } from "@/products/schema";
 import { pagination } from "@/types/pagination";
+import { productsTable } from "./schema";
 
 export namespace ProductsModel {
 	const _insertSchema = createInsertSchema(productsTable, {

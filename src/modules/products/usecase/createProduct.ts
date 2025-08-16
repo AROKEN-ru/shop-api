@@ -1,6 +1,5 @@
 import { APP_ERROR } from "@/common/appError";
-import type { ProductsModel } from "@/products/model";
-import { ProductsRepository } from "@/products/repository";
+import { type ProductsModel, ProductsRepository } from "..";
 
 /**
  * Create a new product.

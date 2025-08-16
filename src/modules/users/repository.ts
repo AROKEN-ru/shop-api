@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
-import type { UsersModel } from "@/users/model";
-import { usersTable } from "@/users/schema";
+import type { UsersModel } from "./model";
+import { usersTable } from "./schema";
 
 export abstract class UsersRepository {
 	static async create(data: UsersModel.Create): Promise<UsersModel.Entity> {

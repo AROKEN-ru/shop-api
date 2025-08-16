@@ -1,9 +1,9 @@
 import Elysia from "elysia";
-import { jwtSetup } from "@/auth/jwtSetup";
-import { AuthModel } from "@/auth/model";
-import { loginUseCase, registerUseCase } from "@/auth/usecase";
 import { ERROR_RESPONSES } from "@/common/errorResponses";
 import { STATUS } from "@/common/statusCodes";
+import { jwtSetup } from "./jwtSetup";
+import { AuthModel } from "./model";
+import { loginUseCase, registerUseCase } from "./usecase";
 
 export const authController = new Elysia({
 	prefix: "/auth",

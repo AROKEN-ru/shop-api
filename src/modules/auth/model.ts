@@ -1,5 +1,5 @@
 import { t } from "elysia";
-import { UsersModel } from "@/users/model";
+import { UsersModel } from "@/modules/users";
 
 export namespace AuthModel {
 	export const login = t.Omit(UsersModel.create, ["name"]);

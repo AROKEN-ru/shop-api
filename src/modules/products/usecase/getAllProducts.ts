@@ -1,5 +1,4 @@
-import type { ProductsModel } from "@/products/model";
-import { ProductsRepository } from "@/products/repository";
+import { type ProductsModel, ProductsRepository } from "..";
 
 /**
  * Retrieves a paginated, sorted, and filtered list of products.

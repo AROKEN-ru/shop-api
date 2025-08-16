@@ -1,9 +1,9 @@
 import Elysia from "elysia";
-import { authGuard } from "@/auth/guard";
 import { ERROR_RESPONSES, withAuthErrors } from "@/common/errorResponses";
 import { STATUS } from "@/common/statusCodes";
-import { UsersModel } from "@/users/model";
-import { getUserByIdUseCase } from "@/users/usecase";
+import { authGuard } from "@/modules/auth";
+import { UsersModel } from "./model";
+import { getUserByIdUseCase } from "./usecase";
 
 export const usersController = new Elysia({
 	prefix: "/users",

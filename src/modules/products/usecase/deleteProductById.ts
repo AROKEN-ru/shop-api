@@ -1,5 +1,5 @@
 import { APP_ERROR } from "@/common/appError";
-import { ProductsRepository } from "@/products/repository";
+import { ProductsRepository } from "..";
 
 /**
  * Delete a product by its ID.

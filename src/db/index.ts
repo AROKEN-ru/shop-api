@@ -1,8 +1,8 @@
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import { config } from "@/config";
-import { productsTable } from "@/products/schema";
-import { usersTable } from "@/users/schema";
+import { productsTable } from "@/modules/products";
+import { usersTable } from "@/modules/users";
 
 export const sqlite = createClient({
 	url: config.DATABASE_URL,
