@@ -111,15 +111,8 @@ export abstract class ProductsRepository {
 		return createdProducts;
 	}
 
-	static async deleteById(id: number): Promise<boolean> {
-		const existingProduct = await this.getById(id);
-
-		if (!existingProduct) {
-			return false;
-		}
-
+	static async deleteById(id: number): Promise<void> {
 		await db.delete(productsTable).where(eq(productsTable.id, id));
-		return true;
 	}
 
 	static async updateById(

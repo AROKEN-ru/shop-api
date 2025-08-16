@@ -11,9 +11,11 @@ import { ProductsRepository } from "..";
  * @throws {AppError} Throws `NOT_FOUND` error if product with given ID doesn't exist.
  */
 export const deleteProductByIdUseCase = async (id: number): Promise<void> => {
-	const isDeleted = await ProductsRepository.deleteById(id);
+	const product = await ProductsRepository.getById(id);
 
-	if (!isDeleted) {
+	if (!product) {
 		throw APP_ERROR.NOT_FOUND();
 	}
+
+	await ProductsRepository.deleteById(id);
 };
