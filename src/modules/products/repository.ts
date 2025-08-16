@@ -121,7 +121,7 @@ export abstract class ProductsRepository {
 	): Promise<ProductsModel.Entity> {
 		const [updatedProduct] = await db
 			.update(productsTable)
-			.set(data)
+			.set({ ...data, updatedAt: sql`CURRENT_TIMESTAMP` })
 			.where(eq(productsTable.id, id))
 			.returning();
 

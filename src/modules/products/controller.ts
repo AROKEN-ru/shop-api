@@ -1,7 +1,7 @@
 import Elysia from "elysia";
 import { ERROR_RESPONSES, withAuthErrors } from "@/common/errorResponses";
 import { STATUS } from "@/common/statusCodes";
-import { authGuard } from "@/modules/auth";
+import { authGuard } from "@/modules/auth/guard";
 import { ProductsModel } from "./model";
 import {
 	createProductUseCase,
