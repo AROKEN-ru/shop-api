@@ -22,6 +22,12 @@ export const productsController = new Elysia({
 		],
 	},
 })
+	.model({
+		product: ProductsModel.entity,
+		products: ProductsModel.paginated,
+		createProduct: ProductsModel.create,
+		updateProduct: ProductsModel.updateById,
+	})
 	.use(authGuard)
 	.get(
 		"",

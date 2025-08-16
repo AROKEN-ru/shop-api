@@ -16,6 +16,11 @@ export const usersController = new Elysia({
 		],
 	},
 })
+	.model({
+		user: UsersModel.entity,
+		getUser: UsersModel.get,
+		createUser: UsersModel.create,
+	})
 	.use(authGuard)
 	.get(
 		"/me",

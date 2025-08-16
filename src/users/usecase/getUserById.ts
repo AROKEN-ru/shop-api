@@ -12,7 +12,7 @@ import { UsersRepository } from "@/users/repository";
 export const getUserByIdUseCase = async (
 	id: number,
 ): Promise<UsersModel.Get> => {
-	const user = await UsersRepository.findById(id);
+	const user = await UsersRepository.getById(id);
 
 	if (!user) {
 		throw APP_ERROR.NOT_FOUND();

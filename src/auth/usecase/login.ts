@@ -17,7 +17,7 @@ import { UsersRepository } from "@/users/repository";
 export const loginUseCase = async (
 	userData: AuthModel.Login,
 ): Promise<UsersModel.Entity> => {
-	const user = await UsersRepository.findByEmail(userData.email);
+	const user = await UsersRepository.getByEmail(userData.email);
 	if (!user) {
 		throw APP_ERROR.INVALID_CREDENTIALS();
 	}

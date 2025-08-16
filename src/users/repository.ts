@@ -9,17 +9,17 @@ export abstract class UsersRepository {
 		return user;
 	}
 
-	static async findById(id: number): Promise<UsersModel.Entity | undefined> {
-		return this.findByField("id", id);
+	static async getById(id: number): Promise<UsersModel.Entity | undefined> {
+		return this.getByField("id", id);
 	}
 
-	static async findByEmail(
+	static async getByEmail(
 		email: string,
 	): Promise<UsersModel.Entity | undefined> {
-		return this.findByField("email", email);
+		return this.getByField("email", email);
 	}
 
-	private static async findByField(
+	private static async getByField(
 		field: keyof UsersModel.Entity,
 		value: UsersModel.Entity[typeof field],
 	): Promise<UsersModel.Entity | undefined> {

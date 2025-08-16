@@ -17,7 +17,7 @@ import { UsersRepository } from "@/users/repository";
 export const registerUseCase = async (
 	userToCreate: AuthModel.Register,
 ): Promise<UsersModel.Entity> => {
-	const existingUser = await UsersRepository.findByEmail(userToCreate.email);
+	const existingUser = await UsersRepository.getByEmail(userToCreate.email);
 	if (existingUser) {
 		throw APP_ERROR.ALREADY_EXISTS("User with this email already exists.");
 	}

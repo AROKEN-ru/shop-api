@@ -12,7 +12,8 @@ export namespace UsersModel {
 		id: t.Number({ minimum: 1 }),
 	});
 
-	export type Entity = typeof _selectSchema.static;
+	export const entity = _selectSchema;
+	export type Entity = typeof entity.static;
 
 	export const get = t.Omit(_selectSchema, ["password"]);
 	export type Get = typeof get.static;
