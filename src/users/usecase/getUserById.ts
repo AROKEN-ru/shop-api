@@ -1,5 +1,4 @@
-import status from "http-status";
-import { AppError } from "@/common/errors";
+import { APP_ERROR } from "@/common/appError";
 import type { UsersModel } from "@/users/model";
 import { UsersRepository } from "@/users/repository";
 
@@ -16,7 +15,7 @@ export const getUserByIdUseCase = async (
 	const user = await UsersRepository.findById(id);
 
 	if (!user) {
-		throw new AppError(`User with ID ${id} not found`, status.NOT_FOUND);
+		throw APP_ERROR.NOT_FOUND();
 	}
 
 	return {

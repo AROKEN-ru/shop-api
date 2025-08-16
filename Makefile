@@ -14,7 +14,8 @@ install:
 	make install-bun \
 	&& make install-deps \
 	&& bun db:generate \
-	&& bun db:migrate
+	&& bun db:migrate \
+	&& bun db:seed
 
 dev:
 	bun dev

@@ -1,8 +1,9 @@
-import { Elysia } from "elysia";
-import status from "http-status";
+import Elysia from "elysia";
 import { jwtSetup } from "@/auth/jwtSetup";
 import { AuthModel } from "@/auth/model";
 import { loginUseCase, registerUseCase } from "@/auth/usecase";
+import { ERROR_RESPONSES } from "@/common/errorResponses";
+import { STATUS } from "@/common/statusCodes";
 
 export const authController = new Elysia({
 	prefix: "/auth",
@@ -17,14 +18,19 @@ export const authController = new Elysia({
 				id: user.id,
 			});
 
-			set.status = status.CREATED;
+			set.status = STATUS.CREATED;
 			return {
 				token,
 			};
 		},
 		{
 			body: AuthModel.register,
-			response: AuthModel.registerResponse,
+			response: {
+				[STATUS.CREATED]: AuthModel.registerResponse,
+				[STATUS.CONFLICT]: ERROR_RESPONSES[STATUS.CONFLICT],
+				[STATUS.UNPROCESSABLE_ENTITY]:
+					ERROR_RESPONSES[STATUS.UNPROCESSABLE_ENTITY],
+			},
 			detail: {
 				description: "Register a new user and return jwt token.",
 			},
@@ -44,7 +50,12 @@ export const authController = new Elysia({
 		},
 		{
 			body: AuthModel.login,
-			response: AuthModel.loginResponse,
+			response: {
+				[STATUS.OK]: AuthModel.loginResponse,
+				[STATUS.UNAUTHORIZED]: ERROR_RESPONSES[STATUS.UNAUTHORIZED],
+				[STATUS.UNPROCESSABLE_ENTITY]:
+					ERROR_RESPONSES[STATUS.UNPROCESSABLE_ENTITY],
+			},
 			detail: {
 				description: "Login a user and return jwt token.",
 			},

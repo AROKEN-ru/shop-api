@@ -4,10 +4,8 @@ import type { UsersModel } from "@/users/model";
 import { usersTable } from "@/users/schema";
 
 export abstract class UsersRepository {
-	static async create(
-		userToCreate: UsersModel.Create,
-	): Promise<UsersModel.Entity> {
-		const [user] = await db.insert(usersTable).values(userToCreate).returning();
+	static async create(data: UsersModel.Create): Promise<UsersModel.Entity> {
+		const [user] = await db.insert(usersTable).values(data).returning();
 		return user;
 	}
 

@@ -1,7 +1,7 @@
 import bearer from "@elysiajs/bearer";
 import type Elysia from "elysia";
 import { jwtSetup } from "@/auth/jwtSetup";
-import { APP_ERROR } from "@/common/constants";
+import { APP_ERROR } from "@/common/appError";
 
 export const authGuard = (app: Elysia) =>
 	app
@@ -9,17 +9,17 @@ export const authGuard = (app: Elysia) =>
 		.use(jwtSetup)
 		.derive({ as: "global" }, async ({ bearer, jwt }) => {
 			if (!bearer) {
-				throw APP_ERROR.UNAUTHORIZED;
+				throw APP_ERROR.UNAUTHORIZED();
 			}
 
 			const payload = await jwt.verify(bearer);
 			if (!payload) {
-				throw APP_ERROR.UNAUTHORIZED;
+				throw APP_ERROR.UNAUTHORIZED();
 			}
 
 			const userId = Number(payload.id);
 			if (Number.isNaN(userId)) {
-				throw APP_ERROR.UNAUTHORIZED;
+				throw APP_ERROR.UNAUTHORIZED();
 			}
 
 			return {

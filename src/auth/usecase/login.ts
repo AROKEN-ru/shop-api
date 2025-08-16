@@ -1,6 +1,6 @@
 import { verifyPassword } from "@/auth/hash";
 import type { AuthModel } from "@/auth/model";
-import { APP_ERROR } from "@/common/constants";
+import { APP_ERROR } from "@/common/appError";
 import type { UsersModel } from "@/users/model";
 import { UsersRepository } from "@/users/repository";
 
@@ -19,7 +19,7 @@ export const loginUseCase = async (
 ): Promise<UsersModel.Entity> => {
 	const user = await UsersRepository.findByEmail(userData.email);
 	if (!user) {
-		throw APP_ERROR.INVALID_CREDENTIALS;
+		throw APP_ERROR.INVALID_CREDENTIALS();
 	}
 
 	const isPasswordValid = await verifyPassword(
@@ -27,7 +27,7 @@ export const loginUseCase = async (
 		user.password,
 	);
 	if (!isPasswordValid) {
-		throw APP_ERROR.INVALID_CREDENTIALS;
+		throw APP_ERROR.INVALID_CREDENTIALS();
 	}
 
 	return user;

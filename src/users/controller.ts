@@ -1,5 +1,7 @@
 import Elysia from "elysia";
 import { authGuard } from "@/auth/guard";
+import { ERROR_RESPONSES, withAuthErrors } from "@/common/errorResponses";
+import { STATUS } from "@/common/statusCodes";
 import { UsersModel } from "@/users/model";
 import { getUserByIdUseCase } from "@/users/usecase";
 
@@ -17,13 +19,16 @@ export const usersController = new Elysia({
 	.use(authGuard)
 	.get(
 		"/me",
-		async ({ userId }) => {
-			return await getUserByIdUseCase(userId);
+		({ userId }) => {
+			return getUserByIdUseCase(userId);
 		},
 		{
-			response: UsersModel.get,
+			response: withAuthErrors({
+				[STATUS.OK]: UsersModel.get,
+				[STATUS.NOT_FOUND]: ERROR_RESPONSES[STATUS.NOT_FOUND],
+			}),
 			detail: {
-				description: "Get the current user",
+				description: "Get the current user.",
 			},
 		},
 	);

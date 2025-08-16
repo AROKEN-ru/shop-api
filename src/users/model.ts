@@ -8,7 +8,9 @@ export namespace UsersModel {
 		name: t.String({ minLength: 1, maxLength: 32 }),
 		password: t.String({ minLength: 6, maxLength: 32 }),
 	});
-	const _selectSchema = createSelectSchema(usersTable);
+	const _selectSchema = createSelectSchema(usersTable, {
+		id: t.Number({ minimum: 1 }),
+	});
 
 	export type Entity = typeof _selectSchema.static;
 

@@ -1,7 +1,6 @@
-import status from "http-status";
 import { hashPassword } from "@/auth/hash";
 import type { AuthModel } from "@/auth/model";
-import { AppError } from "@/common/errors";
+import { APP_ERROR } from "@/common/appError";
 import type { UsersModel } from "@/users/model";
 import { UsersRepository } from "@/users/repository";
 
@@ -20,7 +19,7 @@ export const registerUseCase = async (
 ): Promise<UsersModel.Entity> => {
 	const existingUser = await UsersRepository.findByEmail(userToCreate.email);
 	if (existingUser) {
-		throw new AppError("User already exists", status.CONFLICT);
+		throw APP_ERROR.ALREADY_EXISTS("User with this email already exists.");
 	}
 
 	const hashedPassword = await hashPassword(userToCreate.password);
