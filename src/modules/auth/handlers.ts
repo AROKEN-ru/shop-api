@@ -5,7 +5,7 @@ import { jwtSetup } from "./jwtSetup";
 import { AuthModel } from "./model";
 import { loginUseCase, registerUseCase } from "./usecase";
 
-export const authController = new Elysia({
+export const authHandlers = new Elysia({
 	prefix: "/auth",
 	detail: { tags: ["Auth"] },
 })
@@ -33,6 +33,17 @@ export const authController = new Elysia({
 			},
 			detail: {
 				description: "Register a new user and return jwt token and user data.",
+				responses: {
+					[STATUS.CREATED]: {
+						description: "User registered successfully.",
+					},
+					[STATUS.CONFLICT]: {
+						description: "User with this email already exists.",
+					},
+					[STATUS.UNPROCESSABLE_ENTITY]: {
+						description: "Invalid register data.",
+					},
+				},
 			},
 		},
 	)
@@ -59,6 +70,17 @@ export const authController = new Elysia({
 			},
 			detail: {
 				description: "Login a user and return jwt token and user data.",
+				responses: {
+					[STATUS.OK]: {
+						description: "User logged in successfully.",
+					},
+					[STATUS.UNAUTHORIZED]: {
+						description: "Invalid credentials.",
+					},
+					[STATUS.UNPROCESSABLE_ENTITY]: {
+						description: "Invalid login data.",
+					},
+				},
 			},
 		},
 	);

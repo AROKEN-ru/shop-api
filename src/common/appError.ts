@@ -10,4 +10,6 @@ export const APP_ERROR = {
 		new AppError(message, STATUS.NOT_FOUND),
 	ALREADY_EXISTS: (message = "Already exists.") =>
 		new AppError(message, STATUS.CONFLICT),
+	FORBIDDEN: (message = "Forbidden.") =>
+		new AppError(message, STATUS.FORBIDDEN),
 } as const;

@@ -19,6 +19,7 @@ export const validationErrorSchema = t.Object({
 export const ERROR_RESPONSES = {
 	[STATUS.BAD_REQUEST]: errorSchema,
 	[STATUS.UNAUTHORIZED]: errorSchema,
+	[STATUS.FORBIDDEN]: errorSchema,
 	[STATUS.NOT_FOUND]: errorSchema,
 	[STATUS.CONFLICT]: errorSchema,
 	[STATUS.UNPROCESSABLE_ENTITY]: validationErrorSchema,
@@ -27,9 +28,30 @@ export const ERROR_RESPONSES = {
 
 export const withAuthErrors = <T extends Record<number, any>>(
 	responseSchemas: T,
-): T & { 401: (typeof ERROR_RESPONSES)[401] } => {
+): T & {
+	[STATUS.UNAUTHORIZED]: (typeof ERROR_RESPONSES)[typeof STATUS.UNAUTHORIZED];
+} => {
 	return {
 		...responseSchemas,
-		401: ERROR_RESPONSES[STATUS.UNAUTHORIZED],
+		[STATUS.UNAUTHORIZED]: ERROR_RESPONSES[STATUS.UNAUTHORIZED],
+	};
+};
+
+type ResponseDescription = {
+	description: string;
+};
+
+type ResponseDescriptions = Record<number, ResponseDescription>;
+
+export const withAuthErrorDescription = <T extends ResponseDescriptions>(
+	responseDescriptions: T,
+): T & {
+	[STATUS.UNAUTHORIZED]: ResponseDescription;
+} => {
+	return {
+		...responseDescriptions,
+		[STATUS.UNAUTHORIZED]: {
+			description: "Invalid or missing authentication token.",
+		},
 	};
 };

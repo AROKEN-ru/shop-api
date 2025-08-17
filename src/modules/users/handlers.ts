@@ -1,11 +1,15 @@
 import Elysia from "elysia";
-import { ERROR_RESPONSES, withAuthErrors } from "@/common/errorResponses";
+import {
+	ERROR_RESPONSES,
+	withAuthErrorDescription,
+	withAuthErrors,
+} from "@/common/errorResponses";
 import { STATUS } from "@/common/statusCodes";
 import { authGuard } from "@/modules/auth/guard";
 import { UsersModel } from "./model";
 import { getUserByIdUseCase } from "./usecase";
 
-export const usersController = new Elysia({
+export const usersHandlers = new Elysia({
 	prefix: "/users",
 	detail: {
 		tags: ["Users"],
@@ -34,6 +38,14 @@ export const usersController = new Elysia({
 			}),
 			detail: {
 				description: "Get the current user.",
+				responses: withAuthErrorDescription({
+					[STATUS.OK]: {
+						description: "User retrieved successfully.",
+					},
+					[STATUS.NOT_FOUND]: {
+						description: "User not found.",
+					},
+				}),
 			},
 		},
 	);

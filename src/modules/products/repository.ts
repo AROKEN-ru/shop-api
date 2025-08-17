@@ -1,7 +1,7 @@
 import { asc, count, desc, eq, inArray, like, or, sql } from "drizzle-orm";
 import { db } from "@/db";
+import { productsTable } from "@/db/schema";
 import type { ProductsModel } from "./model";
-import { productsTable } from "./schema";
 
 export abstract class ProductsRepository {
 	static async getAll({
@@ -44,14 +44,15 @@ export abstract class ProductsRepository {
 			.from(productsTable)
 			.where(searchFilter);
 
-		const total = totalProducts.count;
+		const totalCount = totalProducts.count;
+		const totalPages = Math.max(1, Math.ceil(totalCount / safeLimit));
 
 		return {
 			items,
 			page,
-			total,
+			totalItems: totalCount,
 			limit: safeLimit,
-			totalPages: Math.ceil(total / safeLimit),
+			totalPages: totalPages,
 		};
 	}
 

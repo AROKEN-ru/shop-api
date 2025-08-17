@@ -1,6 +1,6 @@
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
-import { usersTable } from "./schema";
+import { usersTable } from "@/db/schema";
 
 export namespace UsersModel {
 	const _insertSchema = createInsertSchema(usersTable, {

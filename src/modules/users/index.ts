@@ -1,5 +1,4 @@
-export * from "./controller";
+export * from "./handlers";
 export * from "./model";
 export * from "./repository";
-export * from "./schema";
 export * from "./usecase";

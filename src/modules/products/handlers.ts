@@ -1,5 +1,9 @@
-import Elysia from "elysia";
-import { ERROR_RESPONSES, withAuthErrors } from "@/common/errorResponses";
+import Elysia, { t } from "elysia";
+import {
+	ERROR_RESPONSES,
+	withAuthErrorDescription,
+	withAuthErrors,
+} from "@/common/errorResponses";
 import { STATUS } from "@/common/statusCodes";
 import { authGuard } from "@/modules/auth/guard";
 import { ProductsModel } from "./model";
@@ -11,7 +15,7 @@ import {
 	updateProductByIdUseCase,
 } from "./usecase";
 
-export const productsController = new Elysia({
+export const productsHandlers = new Elysia({
 	prefix: "/products",
 	detail: {
 		tags: ["Products"],
@@ -38,9 +42,19 @@ export const productsController = new Elysia({
 			query: ProductsModel.getAllParams,
 			response: withAuthErrors({
 				[STATUS.OK]: ProductsModel.paginated,
+				[STATUS.UNPROCESSABLE_ENTITY]:
+					ERROR_RESPONSES[STATUS.UNPROCESSABLE_ENTITY],
 			}),
 			detail: {
 				description: "Get products with pagination.",
+				responses: withAuthErrorDescription({
+					[STATUS.OK]: {
+						description: "Products retrieved successfully.",
+					},
+					[STATUS.UNPROCESSABLE_ENTITY]: {
+						description: "Invalid pagination parameters.",
+					},
+				}),
 			},
 		},
 	)
@@ -57,6 +71,14 @@ export const productsController = new Elysia({
 			}),
 			detail: {
 				description: "Get a product by slug.",
+				responses: withAuthErrorDescription({
+					[STATUS.OK]: {
+						description: "Product retrieved successfully.",
+					},
+					[STATUS.NOT_FOUND]: {
+						description: "Product not found.",
+					},
+				}),
 			},
 		},
 	)
@@ -74,23 +96,39 @@ export const productsController = new Elysia({
 			}),
 			detail: {
 				description: "Create a new product.",
+				responses: withAuthErrorDescription({
+					[STATUS.CREATED]: {
+						description: "Product created successfully.",
+					},
+					[STATUS.CONFLICT]: {
+						description: "Product with same slug already exists.",
+					},
+				}),
 			},
 		},
 	)
 	.delete(
 		"/:id",
 		async ({ params, status }) => {
-			const product = await deleteProductByIdUseCase(params.id);
-			return status(STATUS.NO_CONTENT, product);
+			await deleteProductByIdUseCase(params.id);
+			return status(STATUS.NO_CONTENT, void 0);
 		},
 		{
 			params: ProductsModel.byIdParams,
 			response: withAuthErrors({
-				[STATUS.NO_CONTENT]: ProductsModel.entity,
+				[STATUS.NO_CONTENT]: t.Void(),
 				[STATUS.NOT_FOUND]: ERROR_RESPONSES[STATUS.NOT_FOUND],
 			}),
 			detail: {
 				description: "Delete a product by id.",
+				responses: withAuthErrorDescription({
+					[STATUS.NO_CONTENT]: {
+						description: "Product deleted successfully.",
+					},
+					[STATUS.NOT_FOUND]: {
+						description: "Product not found.",
+					},
+				}),
 			},
 		},
 	)
@@ -112,6 +150,20 @@ export const productsController = new Elysia({
 			}),
 			detail: {
 				description: "Update a product by id.",
+				responses: withAuthErrorDescription({
+					[STATUS.OK]: {
+						description: "Product updated successfully.",
+					},
+					[STATUS.NOT_FOUND]: {
+						description: "Product not found.",
+					},
+					[STATUS.UNPROCESSABLE_ENTITY]: {
+						description: "Invalid product data.",
+					},
+					[STATUS.CONFLICT]: {
+						description: "Product with same slug already exists.",
+					},
+				}),
 			},
 		},
 	);

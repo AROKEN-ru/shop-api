@@ -1,5 +1,9 @@
 import { APP_ERROR } from "@/common/appError";
-import { type ProductsModel, ProductsRepository } from "..";
+import {
+	getProductByIdUseCase,
+	type ProductsModel,
+	ProductsRepository,
+} from "..";
 
 /**
  * Update an existing product by ID.
@@ -17,11 +21,7 @@ export const updateProductByIdUseCase = async (
 	id: number,
 	data: ProductsModel.UpdateById,
 ): Promise<ProductsModel.Entity> => {
-	const product = await ProductsRepository.getById(id);
-
-	if (!product) {
-		throw APP_ERROR.NOT_FOUND();
-	}
+	await getProductByIdUseCase(id);
 
 	if (data.slug) {
 		const existingProduct = await ProductsRepository.getBySlug(data.slug);

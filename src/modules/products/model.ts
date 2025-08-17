@@ -1,7 +1,7 @@
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
+import { productsTable } from "@/db/schema";
 import { pagination } from "@/types/pagination";
-import { productsTable } from "./schema";
 
 export namespace ProductsModel {
 	const _insertSchema = createInsertSchema(productsTable, {
@@ -24,9 +24,9 @@ export namespace ProductsModel {
 	export type Entity = typeof entity.static;
 
 	export const getAllParams = t.Object({
-		page: t.Optional(t.Number()),
-		limit: t.Optional(t.Number()),
-		search: t.Optional(t.String()),
+		page: t.Optional(t.Number({ minimum: 1 })),
+		limit: t.Optional(t.Number({ minimum: 1, maximum: 50 })),
+		search: t.Optional(t.String({ maxLength: 48 })),
 		sort: t.Optional(
 			t.String({
 				enum: ["asc", "desc"],
