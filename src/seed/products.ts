@@ -1,5 +1,5 @@
-import type { ProductsModel } from "@/products/model";
-import { createManyProductsUseCase } from "@/products/usecase";
+import type { ProductsModel } from "@/modules/products/model";
+import { createManyProductsUseCase } from "@/modules/products/usecase";
 
 const seedProducts: ProductsModel.Create[] = [
 	{
