@@ -9,5 +9,8 @@ export const productsTable = sqliteTable("products", {
 	slug: text("slug").notNull().unique(),
 	img: text("img").notNull(),
 	createdAt: text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
-	updatedAt: text("updated_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
+	updatedAt: text("updated_at")
+		.notNull()
+		.default(sql`(CURRENT_TIMESTAMP)`)
+		.$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
 });

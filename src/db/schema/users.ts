@@ -7,5 +7,8 @@ export const usersTable = sqliteTable("users", {
 	name: text("name").notNull(),
 	password: text("password").notNull(),
 	createdAt: text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
-	updatedAt: text("updated_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
+	updatedAt: text("updated_at")
+		.notNull()
+		.default(sql`(CURRENT_TIMESTAMP)`)
+		.$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
 });

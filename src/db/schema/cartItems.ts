@@ -18,7 +18,10 @@ export const cartItemsTable = sqliteTable(
 			}),
 		quantity: integer("quantity").notNull().default(1),
 		createdAt: text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
-		updatedAt: text("updated_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
+		updatedAt: text("updated_at")
+			.notNull()
+			.default(sql`(CURRENT_TIMESTAMP)`)
+			.$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
 	},
 	(table) => [unique().on(table.userId, table.productId)],
 );

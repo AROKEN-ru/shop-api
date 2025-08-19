@@ -82,7 +82,6 @@ export abstract class CartItemsRepository {
 				.update(cartItemsTable)
 				.set({
 					quantity: existingItem.quantity + (data.quantity || 1),
-					updatedAt: sql`CURRENT_TIMESTAMP`,
 				})
 				.where(eq(cartItemsTable.id, existingItem.id))
 				.returning();
@@ -117,7 +116,6 @@ export abstract class CartItemsRepository {
 			.update(cartItemsTable)
 			.set({
 				quantity: data.quantity,
-				updatedAt: sql`CURRENT_TIMESTAMP`,
 			})
 			.where(
 				and(
