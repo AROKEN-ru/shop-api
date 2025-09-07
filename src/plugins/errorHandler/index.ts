@@ -2,7 +2,7 @@ import type Elysia from "elysia";
 import { AppError } from "@/common/errors";
 
 export const errorHandlerPlugin = (app: Elysia) =>
-	app.error({ AppError }).onError(({ error, set, code }) => {
+	app.error({ AppError }).onError(({ error, set, code, path }) => {
 		switch (code) {
 			case "AppError":
 				set.status = error.statusCode;
@@ -19,7 +19,7 @@ export const errorHandlerPlugin = (app: Elysia) =>
 						})),
 				};
 			case "NOT_FOUND":
-				return { error: "Not found" };
+				return { error: `Not found - ${path}` };
 			case "PARSE":
 				return { error: "Parse error" };
 			case "INVALID_COOKIE_SIGNATURE":
