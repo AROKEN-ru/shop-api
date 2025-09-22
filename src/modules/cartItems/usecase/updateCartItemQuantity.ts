@@ -9,12 +9,12 @@ import { type CartItemsModel, CartItemsRepository } from "..";
  * Validates that the cart item exists before updating.
  *
  * @param {CartItemsModel.Update} data The update data (userId, productId, quantity).
- * @returns {Promise<CartItemsModel.Entity | null>} The updated cart item entity, or null if item was removed.
+ * @returns {Promise<CartItemsModel.WithProduct | null>} The updated cart item, or null if item was removed.
  * @throws {AppError} Throws `NOT_FOUND` if the cart item doesn't exist.
  */
 export const updateCartItemQuantityUseCase = async (
 	data: CartItemsModel.Update,
-): Promise<CartItemsModel.Entity | null> => {
+): Promise<CartItemsModel.WithProduct | null> => {
 	const existingItem = await CartItemsRepository.getItemByUserAndProduct(
 		data.userId,
 		data.productId,

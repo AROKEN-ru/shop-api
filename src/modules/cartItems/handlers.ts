@@ -68,7 +68,7 @@ export const cartHandlers = new Elysia({
 		{
 			body: CartItemsModel.addBody,
 			response: withAuthErrors({
-				[STATUS.CREATED]: CartItemsModel.entity,
+				[STATUS.CREATED]: CartItemsModel.withProduct,
 				[STATUS.NOT_FOUND]: ERROR_RESPONSES[STATUS.NOT_FOUND],
 				[STATUS.UNPROCESSABLE_ENTITY]:
 					ERROR_RESPONSES[STATUS.UNPROCESSABLE_ENTITY],
@@ -103,7 +103,7 @@ export const cartHandlers = new Elysia({
 		{
 			body: CartItemsModel.updateBody,
 			response: withAuthErrors({
-				[STATUS.OK]: CartItemsModel.entity,
+				[STATUS.OK]: CartItemsModel.withProduct,
 				[STATUS.NO_CONTENT]: t.Void(),
 				[STATUS.NOT_FOUND]: ERROR_RESPONSES[STATUS.NOT_FOUND],
 				[STATUS.UNPROCESSABLE_ENTITY]:

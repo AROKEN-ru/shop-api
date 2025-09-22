@@ -69,13 +69,15 @@ export abstract class CartItemsRepository {
 
 	static async addOrUpdate(
 		data: CartItemsModel.Add,
-	): Promise<CartItemsModel.Entity> {
+	): Promise<CartItemsModel.WithProduct> {
 		const existingItem = await db.query.cartItems.findFirst({
 			where: and(
 				eq(cartItemsTable.userId, data.userId),
 				eq(cartItemsTable.productId, data.productId),
 			),
 		});
+
+		let itemId: number;
 
 		if (existingItem) {
 			const [updatedItem] = await db
@@ -84,26 +86,30 @@ export abstract class CartItemsRepository {
 					quantity: existingItem.quantity + (data.quantity || 1),
 				})
 				.where(eq(cartItemsTable.id, existingItem.id))
-				.returning();
+				.returning({ id: cartItemsTable.id });
 
-			return updatedItem;
+			itemId = updatedItem.id;
+		} else {
+			const [newItem] = await db
+				.insert(cartItemsTable)
+				.values({
+					userId: data.userId,
+					productId: data.productId,
+					quantity: data.quantity || 1,
+				})
+				.returning({ id: cartItemsTable.id });
+
+			itemId = newItem.id;
 		}
 
-		const [newItem] = await db
-			.insert(cartItemsTable)
-			.values({
-				userId: data.userId,
-				productId: data.productId,
-				quantity: data.quantity || 1,
-			})
-			.returning();
-
-		return newItem;
+		return (await this.getWithProductById(
+			itemId,
+		)) as CartItemsModel.WithProduct;
 	}
 
 	static async updateQuantity(
 		data: CartItemsModel.Update,
-	): Promise<CartItemsModel.Entity | null> {
+	): Promise<CartItemsModel.WithProduct | null> {
 		if (data.quantity === 0) {
 			await this.remove({
 				userId: data.userId,
@@ -114,18 +120,18 @@ export abstract class CartItemsRepository {
 
 		const [updatedItem] = await db
 			.update(cartItemsTable)
-			.set({
-				quantity: data.quantity,
-			})
+			.set({ quantity: data.quantity })
 			.where(
 				and(
 					eq(cartItemsTable.userId, data.userId),
 					eq(cartItemsTable.productId, data.productId),
 				),
 			)
-			.returning();
+			.returning({ id: cartItemsTable.id });
 
-		return updatedItem;
+		if (!updatedItem) return null;
+
+		return (await this.getWithProductById(updatedItem.id)) || null;
 	}
 
 	static async remove(data: CartItemsModel.Remove): Promise<void> {
@@ -148,12 +154,46 @@ export abstract class CartItemsRepository {
 	static async getItemByUserAndProduct(
 		userId: number,
 		productId: number,
-	): Promise<CartItemsModel.Entity | undefined> {
-		return await db.query.cartItems.findFirst({
+	): Promise<CartItemsModel.WithProduct | undefined> {
+		const item = await db.query.cartItems.findFirst({
 			where: and(
 				eq(cartItemsTable.userId, userId),
 				eq(cartItemsTable.productId, productId),
 			),
+			columns: { id: true },
 		});
+
+		if (!item) return undefined;
+
+		return await this.getWithProductById(item.id);
+	}
+
+	private static async getWithProductById(
+		id: number,
+	): Promise<CartItemsModel.WithProduct | undefined> {
+		const [itemWithProduct] = await db
+			.select({
+				id: cartItemsTable.id,
+				userId: cartItemsTable.userId,
+				productId: cartItemsTable.productId,
+				quantity: cartItemsTable.quantity,
+				createdAt: cartItemsTable.createdAt,
+				updatedAt: cartItemsTable.updatedAt,
+				product: {
+					id: productsTable.id,
+					name: productsTable.name,
+					slug: productsTable.slug,
+					description: productsTable.description,
+					img: productsTable.img,
+					price: productsTable.price,
+					createdAt: productsTable.createdAt,
+					updatedAt: productsTable.updatedAt,
+				},
+			})
+			.from(cartItemsTable)
+			.innerJoin(productsTable, eq(cartItemsTable.productId, productsTable.id))
+			.where(eq(cartItemsTable.id, id));
+
+		return itemWithProduct;
 	}
 }

@@ -9,12 +9,12 @@ import { type CartItemsModel, CartItemsRepository } from "..";
  * If the product is already in the cart, increases the quantity.
  *
  * @param {CartItemsModel.Add} data The cart item data (userId, productId, quantity).
- * @returns {Promise<CartItemsModel.Entity>} The created or updated cart item entity.
+ * @returns {Promise<CartItemsModel.WithProduct>} The created or updated cart item.
  * @throws {AppError} Throws `NOT_FOUND` if the product doesn't exist.
  */
 export const addToCartUseCase = async (
 	data: CartItemsModel.Add,
-): Promise<CartItemsModel.Entity> => {
+): Promise<CartItemsModel.WithProduct> => {
 	const product = await ProductsRepository.getById(data.productId);
 
 	if (!product) {
