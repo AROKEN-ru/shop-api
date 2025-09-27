@@ -168,6 +168,17 @@ export abstract class CartItemsRepository {
 		return await this.getWithProductById(item.id);
 	}
 
+	static async getCountByUserId(userId: number): Promise<number> {
+		const [result] = await db
+			.select({
+				totalItems: sum(cartItemsTable.quantity),
+			})
+			.from(cartItemsTable)
+			.where(eq(cartItemsTable.userId, userId));
+
+		return Number(result?.totalItems || 0);
+	}
+
 	private static async getWithProductById(
 		id: number,
 	): Promise<CartItemsModel.WithProduct | undefined> {

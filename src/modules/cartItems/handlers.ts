@@ -10,6 +10,7 @@ import { CartItemsModel } from "./model";
 import {
 	addToCartUseCase,
 	clearCartUseCase,
+	getCartCountUseCase,
 	getCartUseCase,
 	removeCartItemUseCase,
 	updateCartItemQuantityUseCase,
@@ -169,6 +170,28 @@ export const cartHandlers = new Elysia({
 				responses: withAuthErrorDescription({
 					[STATUS.NO_CONTENT]: {
 						description: "Cart cleared successfully.",
+					},
+				}),
+			},
+		},
+	)
+		.get(
+		"/count",
+		async ({ userId }) => {
+			const count = await getCartCountUseCase(userId);
+			return { count };
+		},
+		{
+			response: withAuthErrors({
+				[STATUS.OK]: t.Object({
+					count: t.Number({ description: "Total number of items in cart" }),
+				}),
+			}),
+			detail: {
+				description: "Get total number of items in user's cart.",
+				responses: withAuthErrorDescription({
+					[STATUS.OK]: {
+						description: "Cart item count retrieved successfully.",
 					},
 				}),
 			},
